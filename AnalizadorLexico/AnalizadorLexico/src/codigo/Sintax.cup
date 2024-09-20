@@ -1,0 +1,166 @@
+package codigo;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal Linea, Comillas, T_dato, Int, Cadena, If, Else, Do, While, For,
+    Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,
+    Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,
+    Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Coma, Identificador,
+    Numero, ERROR, Punto, Aste, Reservada;
+non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
+    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR;
+
+start with INICIO;
+
+INICIO ::= 
+    Reservada Identificador Identificador Llave_a SENTENCIA Llave_c |
+    Int Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
+    Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
+    Identificador Identificador Punto Identificador Punto Reservada P_coma INICIO |
+    Reservada Reservada Reservada Main Parentesis_a T_dato Corchete_a Corchete_c Reservada Parentesis_c Llave_a SENTENCIA Llave_c
+; 
+SENTENCIA ::= 
+    SENTENCIA DECLARACION |
+    DECLARACION |
+    SENTENCIA IF | 
+    IF |
+    SENTENCIA IF_ELSE |
+    IF_ELSE |
+    SENTENCIA WHILE |
+    WHILE |
+    SENTENCIA DO_WHILE
+    DO_WHILE |
+    SENTENCIA FOR |
+    FOR
+;
+DECLARACION ::= 
+    Int Identificador P_coma | 
+    Int Identificador Op_atribucion Numero P_coma |
+    Int Identificador Igual Numero P_coma |
+    Int Identificador Igual Identificador Parentesis_a Parentesis_c P_coma |
+    Int Identificador Op_incremento P_coma | 
+    Int Op_incremento Identificador P_coma |
+    Reservada Parentesis_a Identificador Parentesis_c Llave_a SENTENCIA Llave_c |
+    Reservada Reservada Int Identificador Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
+    Identificador Numero P_coma |
+    Reservada Int Identificador Parentesis_a Int Identificador Parentesis_c Identificador Identificador Llave_a SENTENCIA Llave_c |
+    Reservada T_dato Identificador Parentesis_a Int Identificador Parentesis_c Identificador Identificador Llave_a SENTENCIA Llave_c |
+    Reservada T_dato Identificador Parentesis_a T_dato Identificador Parentesis_c Identificador Identificador Llave_a SENTENCIA Llave_c |
+    Reservada T_dato Identificador Parentesis_a Parentesis_c Identificador Identificador Llave_a SENTENCIA Llave_c |
+    Identificador Igual Identificador Punto Identificador Parentesis_a Identificador Punto Identificador Parentesis_a Parentesis_c Parentesis_c P_coma |
+    Identificador Igual Parentesis_a Parentesis_a Numero Multiplicacion Parentesis_a Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Parentesis_c Parentesis_c Multiplicacion Identificador Parentesis_c Division Numero P_coma |
+    Identificador Identificador P_coma|
+    Identificador Igual Identificador Punto Identificador Parentesis_a Parentesis_c P_coma | 
+    T_dato Identificador Igual Identificador Punto Identificador Parentesis_a Parentesis_c P_coma | 
+    Reservada Reservada Reservada Main Parentesis_a T_dato Corchete_a Corchete_c Reservada Parentesis_c Llave_a SENTENCIA Llave_c |
+    Identificador Identificador Punto Identificador Parentesis_a Parentesis_c P_coma |  
+    Identificador Identificador Igual Reservada Identificador Parentesis_a Reservada Identificador Parentesis_a Reservada Punto Reservada Parentesis_c Parentesis_c P_coma |
+    Reservada Reservada Identificador Igual Reservada Reservada Parentesis_a Reservada Punto Reservada Parentesis_c P_coma |
+    Identificador Identificador Identificador Igual Identificador Identificador Parentesis_a Identificador Punto Identificador Parentesis_c P_coma |
+    Reservada Reservada Reservada Identificador Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
+    Identificador Parentesis_a Parentesis_c P_coma |
+    Reservada P_coma |
+    T_dato Identificador P_coma | 
+    T_dato Identificador Identificador P_coma |
+    T_dato Identificador Identificador Identificador P_coma |
+    T_dato Identificador Identificador Identificador Identificador P_coma |
+    T_dato Identificador Identificador Identificador Identificador Identificador P_coma |
+    T_dato Identificador Op_atribucion Numero P_coma |
+    T_dato Identificador Igual Numero P_coma |
+    T_dato Identificador Op_incremento P_coma | 
+    T_dato Op_incremento Identificador P_coma | 
+    Cadena Identificador Op_atribucion Comillas Comillas P_coma |
+    Cadena Identificador Igual Comillas Comillas P_coma |
+    Cadena Identificador Op_atribucion Comillas Identificador Comillas P_coma |
+    Cadena Identificador Igual Comillas Identificador Comillas P_coma |
+    Do Llave_a SENTENCIA Llave_c While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c P_coma |
+    Identificador Igual Identificador Multiplicacion Identificador Multiplicacion Identificador Division Numero P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Division Identificador Identificador Identificador Identificador Identificador Identificador Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Division Identificador Multiplicacion Multiplicacion Identificador Multiplicacion Multiplicacion Division Identificador Division Identificador Identificador Identificador Division Identificador Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Division Identificador Identificador P_coma Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Numero Punto Resta Identificador Identificador Identificador Identificador Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Numero Punto Resta Identificador Identificador Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Numero Punto Resta Identificador Identificador Identificador Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Numero Punto Resta Identificador Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Identificador Parentesis_c P_coma |
+    T_dato Identificador Igual Parentesis_a Parentesis_a Identificador Punto Identificador Multiplicacion Identificador Parentesis_c Division Numero Parentesis_c Multiplicacion Parentesis_a Parentesis_a Numero Multiplicacion Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Parentesis_c Suma Parentesis_a Numero Multiplicacion Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Parentesis_c Suma Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Parentesis_c P_coma |
+    T_dato Identificador Igual Parentesis_a Identificador Punto Identificador Multiplicacion Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Parentesis_c Multiplicacion Parentesis_a Identificador Resta Parentesis_a Identificador Division Numero Parentesis_c Parentesis_c P_coma |
+    T_dato Identificador Igual Numero Punto Numero Multiplicacion Identificador Punto Identificador Multiplicacion Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Identificador Parentesis_c P_coma |
+    T_dato Identificador Igual Parentesis_a Parentesis_a Identificador Multiplicacion Identificador Punto Identificador Parentesis_c Division Numero Parentesis_c Multiplicacion Parentesis_a Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Suma Parentesis_a Identificador Multiplicacion Identificador Parentesis_c Suma Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Parentesis_a Identificador Multiplicacion Identificador Multiplicacion Identificador Parentesis_c Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Parentesis_a Identificador Multiplicacion Identificador Multiplicacion Identificador Parentesis_c Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Parentesis_a Identificador Multiplicacion Identificador Multiplicacion Identificador Parentesis_c Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Parentesis_a Identificador Resta Parentesis_a Identificador Multiplicacion Numero Parentesis_c Parentesis_c Parentesis_c P_coma | 
+    Identificador Igual Parentesis_a Numero Division Numero Parentesis_c Multiplicacion Identificador Punto Identificador Multiplicacion Parentesis_a Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Parentesis_c Multiplicacion Identificador P_coma |
+    Identificador Igual Parentesis_a Numero Division Numero Parentesis_c Multiplicacion Identificador Punto Identificador Multiplicacion Parentesis_a Identificador Punto Identificador Parentesis_a Identificador Division Numero Numero Parentesis_c Parentesis_c P_coma |
+    Identificador Igual Identificador Punto Identificador Multiplicacion Parentesis_a Identificador Multiplicacion Identificador Parentesis_c Multiplicacion Identificador P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Parentesis_a Numero Multiplicacion Identificador Punto Identificador Multiplicacion Identificador Multiplicacion Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Parentesis_c Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Parentesis_a Identificador Resta Identificador Parentesis_c Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Parentesis_a Numero Division Numero Parentesis_c Multiplicacion Identificador Punto Identificador Multiplicacion Parentesis_a Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Parentesis_c Multiplicacion Identificador Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Identificador Punto Identificador Multiplicacion Identificador Multiplicacion Parentesis_a Parentesis_a Identificador Multiplicacion Identificador Parentesis_c Resta Parentesis_a Identificador Multiplicacion Identificador Parentesis_c Parentesis_c Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Numero Division Numero Multiplicacion Identificador Punto Identificador Multiplicacion Parentesis_a Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Parentesis_c Multiplicacion Parentesis_a Identificador Suma Identificador Parentesis_c Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Identificador Punto Identificador Multiplicacion Parentesis_a Identificador Multiplicacion Identificador Parentesis_c Multiplicacion Identificador Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Parentesis_a Identificador Division Numero Parentesis_c Multiplicacion Parentesis_a Identificador Suma Identificador Suma Parentesis_a Identificador Punto Identificador Parentesis_a Identificador Multiplicacion Identificador Parentesis_c Parentesis_c Parentesis_c Parentesis_c P_coma |
+    Identificador Igual Numero Division Numero Multiplicacion Parentesis_a Identificador Suma Parentesis_a Numero Multiplicacion Identificador Parentesis_c Suma Identificador Parentesis_c Multiplicacion Identificador P_coma |
+    Identificador Igual Parentesis_a Identificador Punto Identificador Multiplicacion Identificador Parentesis_c Multiplicacion Parentesis_a Numero Multiplicacion Parentesis_a Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Parentesis_c Parentesis_c Suma Identificador Punto Identificador Parentesis_a Identificador Numero Parentesis_c Resta Parentesis_a Numero Division Numero Multiplicacion Parentesis_a Identificador Resta Identificador Parentesis_c Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Multiplicacion Multiplicacion Identificador Identificador Identificador Multiplicacion Multiplicacion Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Division Identificador Identificador Identificador Division Identificador Identificador Identificador Identificador Division Identificador Identificador Identificador Identificador Identificador Division Identificador Identificador Identificador Identificador Identificador Division Identificador Identificador Identificador Identificador Division Identificador Identificador Identificador Identificador Identificador Division Identificador Identificador Identificador Identificador Identificador Division Identificador Identificador Identificador Identificador Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Division Identificador Multiplicacion Multiplicacion Identificador Multiplicacion Multiplicacion Division Identificador Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Division Identificador Multiplicacion Multiplicacion Identificador Identificador Identificador Multiplicacion Multiplicacion Division Identificador Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Division Identificador Multiplicacion Multiplicacion Identificador Identificador Multiplicacion Multiplicacion Division Identificador Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Division Identificador Multiplicacion Multiplicacion Identificador Identificador Identificador Identificador Multiplicacion Multiplicacion Division Identificador Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Division Identificador Division Identificador Identificador  Identificador Identificador Identificador Identificador Identificador Parentesis_a Identificador Division Identificador Parentesis_c Identificador Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Division Identificador Multiplicacion Multiplicacion Identificador Identificador Identificador Multiplicacion Multiplicacion Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Division Identificador Division Identificador Op_logico Identificador Identificador Identificador Identificador Op_logico Parentesis_a Identificador Division Identificador Parentesis_c P_coma Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador P_coma Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Numero P_coma Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Identificador Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Identificador Parentesis_c P_coma |
+    Reservada Punto Reservada Punto Identificador Parentesis_a Comillas Identificador Identificador Identificador Identificador Identificador Identificador Identificador Identificador P_coma Comillas Suma Parentesis_a Identificador Multiplicacion Identificador Multiplicacion Identificador Division Numero Parentesis_c Parentesis_c P_coma
+
+;
+IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
+;
+SENTENCIA_BOOLEANA ::= 
+    Op_booleano | 
+    Identificador Op_relacional Op_booleano |
+    Identificador Punto Identificador Parentesis_a Comillas Identificador Comillas Parentesis_c |
+    Identificador Op_relacional Numero Op_logico Identificador Op_relacional Numero |
+    Identificador Op_relacional Numero |
+    Identificador Op_relacional Identificador |
+    Identificador Op_relacional Comillas Comillas |
+    Identificador Op_relacional Comillas Identificador Comillas
+;
+IF_ELSE ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c Else Llave_a SENTENCIA Llave_c
+;
+WHILE ::= While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
+;
+FOR ::= For Parentesis_a SENTENCIA_FOR Parentesis_c Llave_a SENTENCIA Llave_c
+;
+SENTENCIA_FOR ::=
+    T_dato Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR |
+    Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR
+;
+DECLARACION_FOR ::= 
+    Identificador Op_atribucion Numero |
+    Identificador Op_incremento | 
+    Op_incremento Identificador
+;
